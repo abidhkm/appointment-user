@@ -6,6 +6,7 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
+  TextInput,
 } from 'react-native';
 import {callApi} from '../utils/api';
 
@@ -42,10 +43,27 @@ const SellersList = ({navigation}) => {
     fetchSellers();
   }, []);
 
+  const [searchStr, setSearchStr] = useState('');
+  const [filtered, setFiltered] = useState([]);
+
+  useEffect(() => {
+    const filteredList = sellers.filter(
+      seller =>
+        seller.name.includes(searchStr) || seller.email.includes(searchStr),
+    );
+    setFiltered(filteredList);
+  }, [searchStr, sellers]);
+
   return (
     <SafeAreaView style={styles.container}>
+      <TextInput
+        style={styles.textInput}
+        onChangeText={text => setSearchStr(text)}
+        value={searchStr}
+        placeholder="Search seller"
+      />
       <FlatList
-        data={sellers}
+        data={filtered}
         renderItem={({item}) => <Item {...item} navigation={navigation} />}
         keyExtractor={item => item.id}
       />
@@ -73,6 +91,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
+  },
+  textInput: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginHorizontal: 16,
+    marginTop: 10,
   },
 });
 
