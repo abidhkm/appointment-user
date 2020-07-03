@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import {callApi} from '../utils/api';
 import {USER} from '../config';
+import {formatDate} from '../utils/formatDate';
 
 function Item({start, end, _id}) {
   const [isSent, setIsSent] = useState(false);
@@ -27,8 +28,8 @@ function Item({start, end, _id}) {
 
   return (
     <View style={styles.item}>
-      <Text style={styles.subsectionData}>Start: {start}</Text>
-      <Text style={styles.subsectionData}>End: {end}</Text>
+      <Text style={styles.subsectionData}>Start: {formatDate(start)}</Text>
+      <Text style={styles.subsectionData}>End: {formatDate(end)}</Text>
       {!isSent && <Button title="Send request" onPress={handleSendReq} />}
       {isSent && <Text style={styles.subsectionData}>Request sent!</Text>}
     </View>
@@ -38,6 +39,9 @@ function Item({start, end, _id}) {
 const Slots = ({navigation, route}) => {
   const [slots, setSlots] = useState([]);
 
+  //   useEffect(() => {
+  //   }, [route.params.sellerId]);
+
   useEffect(() => {
     const fetchTImeSlots = async () => {
       const res = await callApi('get', 'catalog/available-slots', {
@@ -46,7 +50,11 @@ const Slots = ({navigation, route}) => {
 
       setSlots(res.data);
     };
-    fetchTImeSlots();
+    const interval = setInterval(() => {
+      fetchTImeSlots();
+      //   fetchPendingAppointments();
+    }, 3000);
+    return () => clearInterval(interval);
   }, [route.params.sellerId]);
 
   return (
