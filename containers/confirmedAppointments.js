@@ -4,9 +4,9 @@ import {callApi} from '../utils/api';
 import SlotItem from '../components/slotItem';
 
 const ConfirmedAppointments = ({navigation}) => {
-  const [sellers, setSellers] = useState([]);
+  const [appointments, setAppointments] = useState([]);
   useEffect(() => {
-    const fetchTImeSlots = async () => {
+    const fetchConfirmedAppointments = async () => {
       const res = await callApi(
         'get',
         'catalog/appointments-buyer?status=confirmed',
@@ -19,15 +19,15 @@ const ConfirmedAppointments = ({navigation}) => {
         name: slot.seller.user.name,
         id: index.toString(),
       }));
-      setSellers(sellersList);
+      setAppointments(sellersList);
     };
-    fetchTImeSlots();
+    fetchConfirmedAppointments();
   }, []);
 
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={sellers}
+        data={appointments}
         renderItem={({item}) => <SlotItem {...item} navigation={navigation} />}
         keyExtractor={item => item.id}
       />
@@ -39,22 +39,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // marginTop: Constants.statusBarHeight,
-  },
-  subsection: {
-    display: 'flex',
-    flexDirection: 'row',
-  },
-  subsectionData: {
-    fontSize: 20,
-  },
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },
-  title: {
-    fontSize: 32,
   },
 });
 
