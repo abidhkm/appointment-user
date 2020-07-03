@@ -1,10 +1,11 @@
 import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
+import {formatDate} from '../utils/formatDate';
 
 function SlotItem({name, contact, start, end}) {
   return (
     <View style={styles.item}>
-      <Text>{`${start} - ${end}`}</Text>
+      <Text>{`${formatDate(start)} <---> ${formatDate(end)}`}</Text>
       <View style={styles.subsection}>
         <Text style={styles.subsectionData}>{name}</Text>
         <Text style={styles.subsectionData}>{`  ${contact}`}</Text>
