@@ -7,21 +7,44 @@
  */
 
 import React from 'react';
-// import {
-//   SafeAreaView,
-//   StyleSheet,
-//   ScrollView,
-//   View,
-//   Text,
-//   StatusBar,
-//   FlatList,
-//   TouchableOpacity,
-// } from 'react-native';
+import {
+  //   SafeAreaView,
+  //   StyleSheet,
+  //   ScrollView,
+  View,
+  Text,
+  //   StatusBar,
+  //   FlatList,
+  //   TouchableOpacity,
+} from 'react-native';
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Home from './containers/home';
-import Slots from './containers/slots';
+// import Slots from './containers/slots';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import ConfirmedAppointments from './containers/confirmedAppointments';
+import PendingAppointments from './containers/pendingAppointments';
+
+const Drawer = createDrawerNavigator();
+
+function MyDrawer() {
+  return (
+    <Drawer.Navigator>
+      <Drawer.Screen name="Home" component={Home} />
+      <Drawer.Screen
+        name="Confirmed"
+        component={ConfirmedAppointments}
+        options={{title: 'Confirmed appointment'}}
+      />
+      <Drawer.Screen
+        name="Pending"
+        component={PendingAppointments}
+        options={{title: 'Pending appointments'}}
+      />
+    </Drawer.Navigator>
+  );
+}
 
 const Stack = createStackNavigator();
 
@@ -36,18 +59,7 @@ const Stack = createStackNavigator();
 const App: () => React$Node = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{title: 'Sellers'}}
-        />
-        <Stack.Screen
-          name="Slots"
-          component={Slots}
-          options={{title: 'Slots'}}
-        />
-      </Stack.Navigator>
+      <MyDrawer />
     </NavigationContainer>
   );
 };
