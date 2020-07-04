@@ -47,10 +47,11 @@ const SellersList = ({navigation}) => {
   const [filtered, setFiltered] = useState([]);
 
   useEffect(() => {
-    const filteredList = sellers.filter(
-      seller =>
-        seller.name.includes(searchStr) || seller.email.includes(searchStr),
-    );
+    const filteredList = sellers.filter(_seller => {
+      const sellerName = _seller.name.toLowerCase();
+      const sellerEmail = _seller.email.toLowerCase();
+      return sellerName.includes(searchStr) || sellerEmail.includes(searchStr);
+    });
     setFiltered(filteredList);
   }, [searchStr, sellers]);
 

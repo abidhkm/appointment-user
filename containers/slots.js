@@ -17,6 +17,7 @@ import {formatDate} from '../utils/formatDate';
 
 function Item({start, end, _id}) {
   const [isSent, setIsSent] = useState(false);
+
   const handleSendReq = async () => {
     const res = await callApi('post', 'catalog/appointment', {
       buyer: USER,
@@ -38,27 +39,31 @@ function Item({start, end, _id}) {
 
 const Slots = ({navigation, route}) => {
   const [slots, setSlots] = useState([]);
-
-  //   useEffect(() => {
-  //   }, [route.params.sellerId]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchTImeSlots = async () => {
-      const res = await callApi('get', 'catalog/available-slots', {
-        seller: route.params.sellerId,
-      });
+      const res = await callApi(
+        'get',
+        `catalog/available-slots?seller=${route.params.sellerId}`,
+      );
 
+      setIsLoading(false);
       setSlots(res.data);
     };
     const interval = setInterval(() => {
       fetchTImeSlots();
-      //   fetchPendingAppointments();
     }, 3000);
     return () => clearInterval(interval);
   }, [route.params.sellerId]);
 
+  useEffect(() => {
+    setIsLoading(true);
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
+      {!slots.length && isLoading && <Text>Loading..!</Text>}
       <FlatList
         data={slots}
         renderItem={({item}) => <Item {...item} navigation={navigation} />}
